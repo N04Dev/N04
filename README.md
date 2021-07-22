@@ -5,5 +5,7 @@ N04は多機能のMinecraftプラグインです。
 
 対応予定のパッケージ
 > N04_Beta
+
 > N04_AutoMessage
+
 > N04_RunForMoney
