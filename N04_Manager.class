@@ -1,0 +1,373 @@
+package n04_m.n04_manager;
+
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+import java.util.ArrayList;
+
+public final class N04_Manager extends JavaPlugin implements Listener {
+
+    //必要な変数を宣言します
+    private static boolean N04_Installed_RunForMoney = false;
+    private static boolean N04_Installed_AutoMessage = false;
+    private static boolean N04_Installed_Beta = false;
+    private static String N04_Manager_Name = (ChatColor.LIGHT_PURPLE + "[N04_Manager]");
+    private static String N04_Package_Manager_Name = ( ChatColor.LIGHT_PURPLE + "[N04_Manager]");
+
+    //サーバーが有効になったときに発生します
+    @Override
+    public void onEnable() {
+        //プラグインを有効にします
+        Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getConsoleSender().sendMessage(Color("&7[&dN04_Manager&7] &eプラグイン&fが&a有効&fになりました。"));
+        //インストールされているか確認します
+        if ( Bukkit.getPluginManager().isPluginEnabled("N04_Beta"))
+        {
+            N04_Installed_Beta = true;
+            Bukkit.getConsoleSender().sendMessage(Color("&7[&dN04_Manager&7] &dN04_Beta&fと&a同期&fしました。"));
+        }
+        if ( Bukkit.getPluginManager().isPluginEnabled("N04_RunForMoney"))
+        {
+            N04_Installed_Beta = true;
+            Bukkit.getConsoleSender().sendMessage(Color("&7[&dN04_Manager&7] &dN04_RunForMoney&fと&a同期&fしました。"));
+        }
+        if ( Bukkit.getPluginManager().isPluginEnabled("N04_AutoMessage"))
+        {
+            N04_Installed_Beta = true;
+            Bukkit.getConsoleSender().sendMessage(Color("&7[&dN04_Manager&7] &dN04_AutoMessage&fと&a同期&fしました。"));
+        }
+
+    }
+
+    //&をカラーコードに変換します
+    private String Color(String args) {
+        return args == null ? null : ChatColor.translateAlternateColorCodes('&', args);
+    }
+
+    //サーバーが無効になったときに発生します
+    @Override
+    public void onDisable() {
+        Bukkit.getConsoleSender().sendMessage(Color("&7[&dN04_Manager&7] &eプラグイン&fが&c無効&fになりました。"));
+    }
+
+    //インベントリがクリックされたときに発生します
+    @EventHandler
+    public void GUiClick(InventoryClickEvent args) {
+        //インベントリ名を確認します
+        if (args.getInventory().getName().equals(N04_Manager_Name)) {
+            //イベントをキャンセルします
+            args.setCancelled(true);
+            if ( args.getSlot() == 14) //N04 Manager が選択されたとき
+            {
+                //権限を確認します
+                if ( Bukkit.getPlayer(args.getWhoClicked().getName()).isOp() == true)
+                {
+                    Manager_Menu_Open(Bukkit.getPlayer(args.getWhoClicked().getName()));
+                }
+                else
+                {
+                    args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c あなたには権限がありません"));
+                }
+            }
+            if ( args.getSlot() == 12) //N04 AutoMessage が選択されたとき
+            {
+                //権限を確認します
+                if ( Bukkit.getPlayer(args.getWhoClicked().getName()).isOp() == true)
+                {
+                    //N04 AutoMessage がインストールされているか確認します
+                    if ( N04_Installed_AutoMessage)
+                    {
+                        //対応予定
+                        args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c 選択したパッケージは利用できません！"));
+                    }
+                    else
+                    {
+                        args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c 選択したパッケージはインストールされていません！"));
+                    }
+                }
+                else
+                {
+                    args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c あなたには権限がありません"));
+                }
+            }
+            if ( args.getSlot() == 16) //N04 RunForMoney が選択されたとき
+            {
+                //権限を確認します
+                if ( Bukkit.getPlayer(args.getWhoClicked().getName()).isOp() == true)
+                {
+                    //N04 RunForMoney がインストールされているか確認します
+                    if ( N04_Installed_RunForMoney)
+                    {
+                        //対応予定
+                        args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c 選択したパッケージは利用できません！"));
+                    }
+                    else
+                    {
+                        args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c 選択したパッケージはインストールされていません！"));
+                    }
+                }
+                else
+                {
+                    args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c あなたには権限がありません"));
+                }
+            }
+            if ( args.getSlot() == 10) //N04 Beta が選択されたとき
+            {
+                //権限を確認します
+                if ( Bukkit.getPlayer(args.getWhoClicked().getName()).isOp() == true)
+                {
+                    //N04 Beta がインストールされているか確認します
+                    if ( N04_Installed_Beta)
+                    {
+                        //対応予定
+                        args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c 選択したパッケージは利用できません！"));
+                    }
+                    else
+                    {
+                        args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c 選択したパッケージはインストールされていません！"));
+                    }
+                }
+                else {
+                    args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c あなたには権限がありません"));
+                }
+            }
+
+        }
+        if (args.getInventory().getName().equals(N04_Package_Manager_Name)) {
+            //イベントをキャンセルします
+            args.setCancelled(true);
+            if ( args.getSlot() == 14) //N04 Manager が選択されたとき
+            {
+                //権限を確認します
+                if ( Bukkit.getPlayer(args.getWhoClicked().getName()).isOp() == true)
+                {
+
+                }
+                else
+                {
+                    args.getWhoClicked().sendMessage(Color("&7[&dN04 Manager&7] &c あなたには権限がありません"));
+                }
+            }
+        }
+    }
+
+    //N04マネージャーを開きます
+    public void Manager_Menu_Open(Player player) {
+        Inventory inv = Bukkit.createInventory(null, 27, N04_Package_Manager_Name);
+        //ループするために変数を作成します
+        int BackItems = 0;
+        //ループを開始します
+        while (true) {
+            if (BackItems == 27) {
+                //27回ループされたら、ループを終了します。
+                break;
+            }
+            //アイテムを設定します
+            ItemStack BackItem = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 15);
+            ItemMeta BackItemMeta = BackItem.getItemMeta();
+            BackItemMeta.setDisplayName(ChatColor.WHITE + "");
+            BackItem.setItemMeta(BackItemMeta);
+            inv.setItem(BackItems, BackItem);
+            //変数を1上げます
+            BackItems++;
+        }
+        boolean im0 = true;
+        if ( im0 == true) {
+            //アイテムを設定します
+            ItemStack MenuItem0 = new ItemStack(Material.BUCKET, 1);
+            ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+            MenuItemMeta0.setDisplayName(Color("&9WeatherCycle&fを&c無効&fにする"));
+            ArrayList<String> Lore = new ArrayList<>();
+            Lore.add(Color("&a右クリック&fで実行"));
+            MenuItemMeta0.setLore(Lore);
+            MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            MenuItem0.setItemMeta(MenuItemMeta0);
+            inv.setItem(0, MenuItem0);
+        }
+        if ( im0 == true) {
+            //アイテムを設定します
+            ItemStack MenuItem0 = new ItemStack(Material.WATER_BUCKET, 1);
+            ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+            MenuItemMeta0.setDisplayName(Color("&9WeatherCycle&fを&a有効&fにする"));
+            ArrayList<String> Lore = new ArrayList<>();
+            Lore.add(Color("&a右クリック&fで実行"));
+            MenuItemMeta0.setLore(Lore);
+            MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            MenuItem0.setItemMeta(MenuItemMeta0);
+            inv.setItem(9, MenuItem0);
+        }
+        if ( im0 == true) {
+            //アイテムを設定します
+            ItemStack MenuItem0 = new ItemStack(Material.BUCKET, 1);
+            ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+            MenuItemMeta0.setDisplayName(Color("&6DayCycle&fを&c無効&fにする"));
+            ArrayList<String> Lore = new ArrayList<>();
+            Lore.add(Color("&a右クリック&fで実行"));
+            MenuItemMeta0.setLore(Lore);
+            MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            MenuItem0.setItemMeta(MenuItemMeta0);
+            inv.setItem(2, MenuItem0);
+        }
+        if ( im0 == true) {
+            //アイテムを設定します
+            ItemStack MenuItem0 = new ItemStack(Material.WATER_BUCKET, 1);
+            ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+            MenuItemMeta0.setDisplayName(Color("&6DayCycle&fを&a有効&fにする"));
+            ArrayList<String> Lore = new ArrayList<>();
+            Lore.add(Color("&a右クリック&fで実行"));
+            MenuItemMeta0.setLore(Lore);
+            MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            MenuItem0.setItemMeta(MenuItemMeta0);
+            inv.setItem(11, MenuItem0);
+        }
+        //=================重要=================
+        //
+        //   すぐに作ったのであとのはまだできてません。
+        if ( im0 == true) {
+            //アイテムを設定します
+            ItemStack MenuItem0 = new ItemStack(Material.WATER_BUCKET, 1);
+            ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+            MenuItemMeta0.setDisplayName(Color("&c&lすぐに作ったのであとのはまだできてません。"));
+            ArrayList<String> Lore = new ArrayList<>();
+            Lore.add(Color("&c後で作ります"));
+            MenuItemMeta0.setLore(Lore);
+            MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            MenuItem0.setItemMeta(MenuItemMeta0);
+            inv.setItem(13, MenuItem0);
+        }
+        //
+        //=================重要=================
+        //インベントリを開きます
+        player.openInventory(inv);
+    }
+
+    @EventHandler
+    public void onCommand(PlayerCommandPreprocessEvent event) {
+        String[] arg = event.getMessage().split(" ");
+        if (arg[0].equals("/n04")) {
+            //イベントをキャンセルします
+            event.setCancelled(true);
+            //インベントリを作成します
+            Inventory inv = Bukkit.createInventory(null, 27, N04_Manager_Name);
+            //ループするために変数を作成します
+            int BackItems = 0;
+            //ループを開始します
+            while (true) {
+                if (BackItems == 27) {
+                    //27回ループされたら、ループを終了します。
+                    break;
+                }
+                //アイテムを設定します
+                ItemStack BackItem = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 15);
+                ItemMeta BackItemMeta = BackItem.getItemMeta();
+                BackItemMeta.setDisplayName(ChatColor.WHITE + "");
+                BackItem.setItemMeta(BackItemMeta);
+                inv.setItem(BackItems, BackItem);
+                //変数を1上げます
+                BackItems++;
+            }
+            //アイテムを設定します
+            ItemStack MenuItemm = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 6);
+            ItemMeta MenuItemMetam = MenuItemm.getItemMeta();
+            MenuItemMetam.setDisplayName(Color("&dN04 Manager"));
+            ArrayList<String> Lorem = new ArrayList<>();
+            Lorem.add(Color("&a右クリック&fで開きます"));
+            MenuItemMetam.setLore(Lorem);
+            MenuItemMetam.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            MenuItemm.setItemMeta(MenuItemMetam);
+            inv.setItem(14, MenuItemm);
+            //インストールされているか確認します
+            if ( N04_Installed_Beta == true) {
+                //アイテムを設定します
+                ItemStack MenuItem0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
+                ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+                MenuItemMeta0.setDisplayName(Color("&aN04 Beta"));
+                ArrayList<String> Lore = new ArrayList<>();
+                Lore.add(Color("&a右クリック&fで開きます"));
+                MenuItemMeta0.setLore(Lore);
+                MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                MenuItem0.setItemMeta(MenuItemMeta0);
+                inv.setItem(10, MenuItem0);
+            }
+            else
+            {
+                //アイテムを設定します
+                ItemStack MenuItem0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14);
+                ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+                MenuItemMeta0.setDisplayName(Color("&cN04 Beta"));
+                ArrayList<String> Lore = new ArrayList<>();
+                Lore.add(Color("&c利用できません"));
+                MenuItemMeta0.setLore(Lore);
+                MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                MenuItem0.setItemMeta(MenuItemMeta0);
+                inv.setItem(10, MenuItem0);
+            }
+            //インストールされているか確認します
+            if ( N04_Installed_AutoMessage == true) {
+                //アイテムを設定します
+                ItemStack MenuItem0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
+                ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+                MenuItemMeta0.setDisplayName(Color("&aN04 AutoMessage"));
+                ArrayList<String> Lore = new ArrayList<>();
+                Lore.add(Color("&a右クリック&fで開きます"));
+                MenuItemMeta0.setLore(Lore);
+                MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                MenuItem0.setItemMeta(MenuItemMeta0);
+                inv.setItem(12, MenuItem0);
+            }
+            else
+            {
+                //アイテムを設定します
+                ItemStack MenuItem0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14);
+                ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+                MenuItemMeta0.setDisplayName(Color("&cN04 AutoMessage"));
+                ArrayList<String> Lore = new ArrayList<>();
+                Lore.add(Color("&c利用できません"));
+                MenuItemMeta0.setLore(Lore);
+                MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                MenuItem0.setItemMeta(MenuItemMeta0);
+                inv.setItem(12, MenuItem0);
+            }
+            //インストールされているか確認します
+            if ( N04_Installed_RunForMoney == true) {
+                //アイテムを設定します
+                ItemStack MenuItem0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 11);
+                ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+                MenuItemMeta0.setDisplayName(Color("&aN04 RunForMoney"));
+                ArrayList<String> Lore = new ArrayList<>();
+                Lore.add(Color("&a右クリック&fで開きます"));
+                MenuItemMeta0.setLore(Lore);
+                MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                MenuItem0.setItemMeta(MenuItemMeta0);
+                inv.setItem(16, MenuItem0);
+            }
+            else
+            {
+                //アイテムを設定します
+                ItemStack MenuItem0 = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14);
+                ItemMeta MenuItemMeta0 = MenuItem0.getItemMeta();
+                MenuItemMeta0.setDisplayName(Color("&cN04 RunForMoney"));
+                ArrayList<String> Lore = new ArrayList<>();
+                Lore.add(Color("&c利用できません"));
+                MenuItemMeta0.setLore(Lore);
+                MenuItemMeta0.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                MenuItem0.setItemMeta(MenuItemMeta0);
+                inv.setItem(16, MenuItem0);
+            }
+            //インベントリを開きます
+            event.getPlayer().openInventory(inv);
+        }
+    }
+}
